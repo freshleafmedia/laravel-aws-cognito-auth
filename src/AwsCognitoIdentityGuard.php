@@ -556,7 +556,7 @@ class AwsCognitoIdentityGuard implements StatefulGuard
 
         try {
 
-            $response = $this->client->adminInitiateAuth([
+            $request = [
                 'AuthFlow' => 'ADMIN_NO_SRP_AUTH',
                 'AuthParameters' => [
                     'USERNAME' => $username,
@@ -564,7 +564,13 @@ class AwsCognitoIdentityGuard implements StatefulGuard
                 ],
                 'ClientId' => $this->getDefaultAppConfig()['client-id'],
                 'UserPoolId' => $this->config['pool-id'],
-            ]);
+            ];
+
+            if (isset($this->getDefaultAppConfig()['client-secret']) === true) {
+                $request['AuthParameters']['SECRET_HASH'] = $this->createSecretHash($username);
+            }
+
+            $response = $this->client->adminInitiateAuth($request);
 
             return new AuthAttempt(!!$response['AuthenticationResult'], $response->toArray());
 
@@ -1015,6 +1021,16 @@ class AwsCognitoIdentityGuard implements StatefulGuard
         $this->request = $request;
 
         return $this;
+    }
+
+    protected function createSecretHash($message)
+    {
+        return base64_encode(hash_hmac(
+            'sha256',
+            $message . $this->getDefaultAppConfig()['client-id'],
+            $this->getDefaultAppConfig()['client-secret'],
+            true
+        ));
     }
 
 }
