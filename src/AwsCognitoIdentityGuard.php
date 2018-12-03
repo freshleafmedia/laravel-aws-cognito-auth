@@ -566,7 +566,7 @@ class AwsCognitoIdentityGuard implements StatefulGuard
                 'UserPoolId' => $this->config['pool-id'],
             ];
 
-            if ($this->getDefaultAppConfig()['client-secret'] !== null) {
+            if (isset($this->getDefaultAppConfig()['client-secret']) === true) {
                 $request['AuthParameters']['SECRET_HASH'] = $this->createSecretHash($username);
             }
 
