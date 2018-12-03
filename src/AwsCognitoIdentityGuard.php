@@ -566,7 +566,7 @@ class AwsCognitoIdentityGuard implements StatefulGuard
                 'UserPoolId' => $this->config['pool-id'],
             ];
 
-            if (env('AWS_COGNITO_IDENTITY_APP_CLIENT_SECRET') !== null) {
+            if ($this->getDefaultAppConfig()['client-secret'] !== null) {
                 $request['AuthParameters']['SECRET_HASH'] = $this->createSecretHash($username);
             }
 
@@ -1027,8 +1027,8 @@ class AwsCognitoIdentityGuard implements StatefulGuard
     {
         return base64_encode(hash_hmac(
             'sha256',
-            $message . env('AWS_COGNITO_IDENTITY_APP_CLIENT_ID'),
-            env('AWS_COGNITO_IDENTITY_APP_CLIENT_SECRET'),
+            $message . $this->getDefaultAppConfig()['client-id'],
+            $this->getDefaultAppConfig()['client-secret'],
             true
         ));
     }

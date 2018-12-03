@@ -93,7 +93,7 @@ Open `config/auth.php` and set your default guard's driver to `aws-cognito`. Out
 
 ```
 
-Open `config/aws-cognito-auth.php` and add your AWS Cognito User Pool's id, and User Pool App's `client-id`.
+Open `config/aws-cognito-auth.php` and add your AWS Cognito User Pool's id, and User Pool App's `client-id` and optionally if you want to use request signing its `client-secret`.
 
 ```php
 'pool-id' => '<xxx-xxxxx>',
@@ -103,6 +103,7 @@ Open `config/aws-cognito-auth.php` and add your AWS Cognito User Pool's id, and 
 'apps' => [
     'default' => [
         'client-id' => '<xxxxxxxxxx>',
+        'client-secret' => '<xxxxxxxxxx>',
         'refresh-token-expiration' => 30,
     ],
 ]
@@ -114,6 +115,7 @@ When creating an App for your User Pool the default Refresh Token Expiration tim
 'apps' => [
     'default' => [
         'client-id' => '<xxxxxxxxxx>',
+        'client-secret' => '<xxxxxxxxxx>',
         'refresh-token-expiration' => <num-of-days>,
     ],
 ]
